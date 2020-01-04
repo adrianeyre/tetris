@@ -1,8 +1,8 @@
-import DirectionEnum from '../enums/direction-enum';
 import SpriteTypeEnum from '../enums/sprite-type-enum';
 
 import Sprite from '../sprite';
 import ISpriteProps from '../interfaces/sprite-props';
+import ImageEnum from 'classes/enums/image-enum';
 
 describe('Sprite', () => {
 	let defaultConfig: ISpriteProps
@@ -13,12 +13,8 @@ describe('Sprite', () => {
 			visable: true,
 			x: 10,
 			y: 10,
-			width: 8,
-			height: 8,
-			xOffset: false,
-			direction: DirectionEnum.RIGHT,
-			image: 'alien1',
-			type: SpriteTypeEnum.ALIEN1,
+			image: ImageEnum.SPRITE01,
+			type: SpriteTypeEnum.SPRITE01,
 		}
 	})
 
@@ -29,14 +25,8 @@ describe('Sprite', () => {
 		expect(sprite.visable).toEqual(true);
 		expect(sprite.x).toEqual(10);
 		expect(sprite.y).toEqual(10);
-		expect(sprite.width).toEqual(8);
-		expect(sprite.height).toEqual(8);
-		expect(sprite.xStep).toEqual(5);
-		expect(sprite.yStep).toEqual(2);
-		expect(sprite.xOffset).toEqual(false);
 		expect(sprite.zIndex).toEqual(5000);
-		expect(sprite.direction).toEqual(DirectionEnum.RIGHT);
-		expect(sprite.image).toEqual('alien1a.png');
-		expect(sprite.type).toEqual(SpriteTypeEnum.ALIEN1);
+		expect(sprite.image).toEqual('sprite-01.png');
+		expect(sprite.type).toEqual(SpriteTypeEnum.SPRITE01);
 	});
 });

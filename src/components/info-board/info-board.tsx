@@ -2,7 +2,7 @@ import React from 'react';
 
 import IInfoBoardProps from './interfaces/info-board-props';
 
-// import player from '../../images/player.png';
+import sprite from '../../images/sprite-07.png';
 
 import './styles/info-board.scss';
 
@@ -10,9 +10,9 @@ export default class InfoBoard extends React.Component<IInfoBoardProps, {}> {
 	public render() {
 		return <div className="info-board" style={ this.styleInfoBoard() }>
 			<div className="info-board-header">
-				{/* <img src={ player } alt="player" /> */}
+				<img src={ sprite } alt="player" />
 				<span className="header-text">Tetris</span>
-				{/* <img src={player } alt="player" /> */}
+				<img src={sprite } alt="player" />
 			</div>
 
 			{ this.props.gameOver && <div className="game-over-area">
@@ -21,7 +21,7 @@ export default class InfoBoard extends React.Component<IInfoBoardProps, {}> {
 			</div> }
 
 			<div className="info-board-instructions">
-				<p></p>
+				<p>You have to make full horizontal lines with the different shaped blocks that fall into the game area. Full lines will then disappear and provide points. The more lines you make at the same time, the more points you earn.</p>
 			</div>
 
 			<div className="button-area">

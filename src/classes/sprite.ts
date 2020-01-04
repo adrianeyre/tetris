@@ -1,7 +1,5 @@
 import ISpriteProps from './interfaces/sprite-props';
 import ISprite from './interfaces/sprite';
-import DirectionEnum from './enums/direction-enum';
-import PlayerResultEnum from './enums/player-result-enum';
 import SpriteTypeEnum from './enums/sprite-type-enum';
 import ImageEnum from './enums/image-enum';
 
@@ -19,9 +17,7 @@ export default class Sprite implements ISprite {
 	public x: number;
 	public y: number;
 	public zIndex: number;
-	public direction: DirectionEnum | undefined;
 	public image: string;
-	public speed: number | undefined;
 	public type: SpriteTypeEnum;
 
 	private imageType: ImageEnum;
@@ -36,12 +32,7 @@ export default class Sprite implements ISprite {
 		this.x = config.x;
 		this.y = config.y;
 		this.zIndex = this.Z_INDEX;
-		this.direction = config.direction ? config.direction : undefined;
 		this.image = this.playerImages[this.imageType];
 		this.type = config.type;
-	}
-
-	public move = (): PlayerResultEnum => {
-		return PlayerResultEnum.NO_MOVE;
 	}
 }

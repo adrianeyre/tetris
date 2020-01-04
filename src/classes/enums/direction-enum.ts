@@ -1,8 +1,9 @@
 enum DirectEnum {
-	UP = 0,
-	DOWN = 1,
-	LEFT = 2,
-	RIGHT = 3,
+	STATIC = -1,
+	DOWN = 0,
+	RIGHT = 1,
+	UP = 2,
+	LEFT = 3,
 }
 
 export default DirectEnum;

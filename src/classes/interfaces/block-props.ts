@@ -1,11 +1,9 @@
 import SpriteTypeEnum from '../enums/sprite-type-enum';
 
-export default interface ISprite {
+export default interface IBlockProps {
 	key: string;
-	visable: boolean;
 	x: number;
 	y: number;
-	zIndex: number
-	image: string;
 	type: SpriteTypeEnum;
+	containerHeight: number;
 }
