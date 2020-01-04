@@ -5,50 +5,39 @@ import PlayerResultEnum from './enums/player-result-enum';
 import SpriteTypeEnum from './enums/sprite-type-enum';
 import ImageEnum from './enums/image-enum';
 
+import sprite01 from '../images/sprite-01.png';
+import sprite02 from '../images/sprite-02.png';
+import sprite03 from '../images/sprite-03.png';
+import sprite04 from '../images/sprite-04.png';
+import sprite05 from '../images/sprite-05.png';
+import sprite06 from '../images/sprite-06.png';
+import sprite07 from '../images/sprite-07.png';
+
 export default class Sprite implements ISprite {
 	public key: string;
 	public visable: boolean;
 	public x: number;
 	public y: number;
-	public width: number;
-	public height: number;
-	public xStep: number;
-	public yStep: number;
-	public xOffset: boolean;
-	public score: number;
-	public movable: boolean;
 	public zIndex: number;
 	public direction: DirectionEnum | undefined;
-	public image: ImageEnum;
+	public image: string;
 	public speed: number | undefined;
 	public type: SpriteTypeEnum;
 
-	private imageOn: boolean;
-	private imageType: string;
+	private imageType: ImageEnum;
 
-	readonly X_OFFSET: boolean = false;
 	readonly Z_INDEX: number = 5000;
-	readonly X_STEP: number = 5;
-	readonly Y_STEP: number = 2;
-	readonly playerImages = {}
+	readonly playerImages = [sprite01, sprite02, sprite03, sprite04, sprite05, sprite06, sprite07];
 
 	constructor(config: ISpriteProps) {
-		this.imageOn = true;
 		this.imageType = config.image;
 		this.key = config.key;
 		this.visable = config.visable;
 		this.x = config.x;
 		this.y = config.y;
-		this.width = config.width;
-		this.height = config.height;
-		this.xStep = this.X_STEP;
-		this.yStep = this.Y_STEP;
-		this.movable = config.movable ? config.movable : false;
-		this.xOffset = config.xOffset ? config.xOffset : this.X_OFFSET;
 		this.zIndex = this.Z_INDEX;
-		this.score = config.score ? config.score : 0;
 		this.direction = config.direction ? config.direction : undefined;
-		this.image = this.playerImages[this.imageType][this.imageOn ? 0 : 1];
+		this.image = this.playerImages[this.imageType];
 		this.type = config.type;
 	}
 

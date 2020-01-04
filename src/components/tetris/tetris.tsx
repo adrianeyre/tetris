@@ -11,8 +11,8 @@ import './styles/tetris.scss';
 import PlayerResultEnum from 'classes/enums/player-result-enum';
 
 export default class Tetris extends React.Component<ITetrisProps, ITetrisState> {
-	private SPRITE_BLOCKS_WIDTH: number = 143;
-	private SPRITE_BLOCKS_HEIGHT: number = 96;
+	private SPRITE_BLOCKS_WIDTH: number = 20;
+	private SPRITE_BLOCKS_HEIGHT: number = 20;
 	private container: any;
 
 	constructor(props: ITetrisProps) {
@@ -65,7 +65,7 @@ export default class Tetris extends React.Component<ITetrisProps, ITetrisState> 
 		position: 'absolute' as 'absolute',
 		width: `100%`,
 		maxWidth: `${ this.state.containerHeight }px`,
-		top: `${ this.state.containerWidth / 100 * 100 }px`,
+		top: `${ this.state.containerWidth / 100 * 110 }px`,
 	})
 
 	private startGame = async (): Promise<void> => {
@@ -81,7 +81,7 @@ export default class Tetris extends React.Component<ITetrisProps, ITetrisState> 
 		let containerWidth = this.container && this.container.getBoundingClientRect().width;
 		if (containerWidth > containerHeight) containerWidth = containerHeight;
 		const spriteWidth = containerWidth / this.SPRITE_BLOCKS_WIDTH;
-		const spriteHeight = ((containerWidth / 100) * 85 ) / this.SPRITE_BLOCKS_HEIGHT;
+		const spriteHeight = ((containerWidth / 100) * 100 ) / this.SPRITE_BLOCKS_HEIGHT;
 		this.setState(() => ({ spriteWidth, spriteHeight, containerWidth, containerHeight }))
 	}
 
