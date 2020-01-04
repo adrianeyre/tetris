@@ -23,7 +23,15 @@ export default class Game implements IGame {
 
 	readonly height: number = 20;
 	readonly width: number = 10;
-	readonly spriteTypes: SpriteTypeEnum[] = [SpriteTypeEnum.SPRITE01, SpriteTypeEnum.SPRITE02, SpriteTypeEnum.SPRITE03];
+	readonly spriteTypes: SpriteTypeEnum[] = [
+		SpriteTypeEnum.SPRITE01,
+		SpriteTypeEnum.SPRITE02,
+		SpriteTypeEnum.SPRITE03,
+		SpriteTypeEnum.SPRITE04,
+		SpriteTypeEnum.SPRITE05,
+		SpriteTypeEnum.SPRITE06,
+		SpriteTypeEnum.SPRITE07,
+	];
 
 	constructor(config: ITetrisProps) {
 		this.player = new Player(config);
@@ -100,7 +108,7 @@ export default class Game implements IGame {
 
 	private rotateBlock = (direction: DirectionEnum): void => {
 		this.hideOrShowBlock(false);
-		this.block.rotate(direction);
+		this.block.rotate(direction, this.sprites);
 		this.hideOrShowBlock(true);
 	}
 

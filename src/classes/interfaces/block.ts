@@ -16,6 +16,6 @@ export default interface IBlock {
 	block: number[][][];
 	containerHeight: number;
 	containerWidth: number;
-	rotate(direction: DirectionEnum): void;
+	rotate(direction: DirectionEnum, sprites: ISprite[]): void;
 	move(direction: DirectionEnum, sprites: ISprite[]): PlayerResultEnum;
 }

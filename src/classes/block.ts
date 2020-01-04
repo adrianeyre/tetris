@@ -39,11 +39,18 @@ export default class Block implements IBlock {
 		this.block = this.updateBlock(this.direction);
 	}
 
-	public rotate = (direction: DirectionEnum): void => {
-		if (direction === DirectionEnum.RIGHT) this.direction ++;
-		if (direction === DirectionEnum.LEFT) this.direction --;
-		if (this.direction > 3) this.direction = 0;
-		if (this.direction < 0) this.direction = 3;
+	public rotate = (direction: DirectionEnum, sprites: ISprite[]): void => {
+		let newDirection = this.direction
+
+		if (direction === DirectionEnum.RIGHT) newDirection ++;
+		if (direction === DirectionEnum.LEFT) newDirection --;
+		if (newDirection > 3) newDirection = 0;
+		if (newDirection < 0) newDirection = 3;
+
+		const newBlocks = this.updateBlock(newDirection);
+		const isMoveValidRight = this.isMoveValid(sprites, newBlocks[0]);
+		const isMoveValidLeft = this.isMoveValid(sprites, newBlocks[1])
+		if (isMoveValidRight && isMoveValidLeft) this.direction = newDirection;
 
 		this.matrix = this.updateMatrix(this.direction);
 		this.stop = this.updateStop(this.direction);
@@ -74,10 +81,17 @@ export default class Block implements IBlock {
 	}
 
 	private moveSidewards = (direction: DirectionEnum, sprites: ISprite[]): boolean => {
-		let allowMove = true;
-
 		const block = this.block[direction === DirectionEnum.RIGHT ? 0 : 1];
+		const allowMove = this.isMoveValid(sprites, block);
 
+		if (allowMove && direction === DirectionEnum.RIGHT) this.x ++;
+		if (allowMove && direction === DirectionEnum.LEFT) this.x --;
+		return true;
+	}
+
+	private isMoveValid = (sprites: ISprite[], block: number[][]): boolean => {
+		let allowMove = true;
+		
 		block.forEach((blockMatix: number[]) => {
 			const sprite = sprites.find((spr: ISprite) => spr.x === this.x + blockMatix[0] && spr.y === this.y + blockMatix[1]);
 
@@ -85,9 +99,7 @@ export default class Block implements IBlock {
 			if (this.x + blockMatix[0] > this.containerWidth || this.x + blockMatix[0] < 1) allowMove = false;
 		})
 
-		if (allowMove && direction === DirectionEnum.RIGHT) this.x ++;
-		if (allowMove && direction === DirectionEnum.LEFT) this.x --;
-		return true;
+		return allowMove;
 	}
 
 	private updateMatrix = (direction: DirectionEnum): number[][] => this.matrices.matrix[direction];
