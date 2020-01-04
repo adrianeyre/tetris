@@ -8,4 +8,7 @@ export default interface ISprite {
 	zIndex: number
 	image: string;
 	type: SpriteTypeEnum;
+	show(): boolean;
+	hide(): boolean;
+	updateImage(type: SpriteTypeEnum): string;
 }

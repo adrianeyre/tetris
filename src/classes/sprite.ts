@@ -23,7 +23,7 @@ export default class Sprite implements ISprite {
 	private imageType: ImageEnum;
 
 	readonly Z_INDEX: number = 5000;
-	readonly playerImages = [sprite01, sprite02, sprite03, sprite04, sprite05, sprite06, sprite07];
+	readonly playerImages = {sprite01, sprite02, sprite03, sprite04, sprite05, sprite06, sprite07};
 
 	constructor(config: ISpriteProps) {
 		this.imageType = config.image;
@@ -35,4 +35,8 @@ export default class Sprite implements ISprite {
 		this.image = this.playerImages[this.imageType];
 		this.type = config.type;
 	}
+
+	public show = (): boolean => this.visable = true;
+	public hide = (): boolean => this.visable = false;
+	public updateImage = (type: SpriteTypeEnum): string => this.image = this.playerImages[type];
 }

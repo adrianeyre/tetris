@@ -6,4 +6,5 @@ export default interface IBlockProps {
 	y: number;
 	type: SpriteTypeEnum;
 	containerHeight: number;
+	containerWidth: number;
 }

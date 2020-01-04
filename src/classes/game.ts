@@ -23,11 +23,12 @@ export default class Game implements IGame {
 
 	readonly height: number = 20;
 	readonly width: number = 10;
+	readonly spriteTypes: SpriteTypeEnum[] = [SpriteTypeEnum.SPRITE01, SpriteTypeEnum.SPRITE02, SpriteTypeEnum.SPRITE03];
 
 	constructor(config: ITetrisProps) {
 		this.player = new Player(config);
 		this.sprites = [];
-		this.block = this.newBlock(SpriteTypeEnum.SPRITE01);
+		this.block = this.newBlock(this.randomSprite());
 		this.level = 1;
 		this.direction = DirectionEnum.RIGHT
 		this.isGameInPlay = false;
@@ -39,19 +40,22 @@ export default class Game implements IGame {
 
 	public handleInput = (playerResult: PlayerResultEnum, sprite?: ISprite): void => {
 		switch (playerResult) {
+			case PlayerResultEnum.BLOCK_STOPPED:
+				this.createBlock(); break;
 			case PlayerResultEnum.ENTER:
 			case PlayerResultEnum.SPACE_BAR:
-			case PlayerResultEnum.ARROW_RIGHT:
 				this.rotateBlock(DirectionEnum.RIGHT); break;
+			case PlayerResultEnum.ARROW_RIGHT:
+				this.moveBlock(DirectionEnum.RIGHT); break;
 			case PlayerResultEnum.ARROW_LEFT:
-				this.rotateBlock(DirectionEnum.LEFT); break;
+				this.moveBlock(DirectionEnum.LEFT); break;
 			case PlayerResultEnum.ARROW_DOWN:
-				this.moveBlock(); break;
+				this.moveBlock(DirectionEnum.DOWN); break;
 		}
 	}
 
 	public handleTimer = (): void => {
-		this.moveBlock();
+		this.moveBlock(DirectionEnum.DOWN);
 	}
 
 	private createBoard = (): void => {
@@ -69,19 +73,28 @@ export default class Game implements IGame {
 		}
 	}
 
+	private createBlock = () => {
+		this.block = this.newBlock(this.randomSprite());
+	}
+
 	private newBlock = (type: SpriteTypeEnum): IBlock => new Block({
 		key: 'player-block',
 		x: 5,
-		y: 5,
+		y: 0,
 		type,
-		containerHeight: this.height
+		containerHeight: this.height,
+		containerWidth: this.width,
 	});
 
 	private hideOrShowBlock = (visable: boolean): void => {
 		this.block.matrix.forEach((matrix: number[]) => {
 			const sprite = this.sprites.find((spr: ISprite) => spr.x === this.block.x + matrix[0] && spr.y === this.block.y + matrix[1]);
 
-			if (sprite) sprite.visable = visable;
+			if (sprite) {
+				if (visable) sprite.show();
+				if (!visable) sprite.hide();
+				sprite.updateImage(this.block.type);
+			}
 		})
 	}
 
@@ -91,11 +104,13 @@ export default class Game implements IGame {
 		this.hideOrShowBlock(true);
 	}
 
-	private moveBlock = (): void => {
+	private moveBlock = (direction: DirectionEnum): void => {
 		this.hideOrShowBlock(false);
-		const result = this.block.move();
+		const result = this.block.move(direction, this.sprites);
 		this.hideOrShowBlock(true);
 
 		this.handleInput(result);
 	}
+
+	private randomSprite = (): SpriteTypeEnum => this.spriteTypes[Math.floor(Math.random() * this.spriteTypes.length)];
 }
