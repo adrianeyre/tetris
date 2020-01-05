@@ -3,6 +3,7 @@ import SpriteTypeEnum from '../enums/sprite-type-enum';
 
 import Block from '../block';
 import IBlockProps from '../interfaces/block-props';
+import ISprite from 'classes/interfaces/sprite';
 
 describe('Block', () => {
 	let defaultConfig: IBlockProps
@@ -12,8 +13,10 @@ describe('Block', () => {
 			key: 'sprite',
 			x: 10,
 			y: 10,
+			direction: DirectionEnum.DOWN,
 			type: SpriteTypeEnum.SPRITE01,
 			containerHeight: 20,
+			containerWidth: 10,
 		}
 	})
 
@@ -29,33 +32,18 @@ describe('Block', () => {
 
 	it('Should rotate the block to the right', () => {
 		const block = new Block(defaultConfig);
+		const sprites: ISprite[] = [];
 
 		expect(block.direction).toEqual(DirectionEnum.DOWN);
-		block.rotate(DirectionEnum.RIGHT);
-		expect(block.direction).toEqual(DirectionEnum.RIGHT);
-		block.rotate(DirectionEnum.RIGHT);
-		expect(block.direction).toEqual(DirectionEnum.UP);
-		block.rotate(DirectionEnum.RIGHT);
-		expect(block.direction).toEqual(DirectionEnum.LEFT);
-	});
-
-	it('Should rotate the block to the left', () => {
-		const block = new Block(defaultConfig);
-
-		expect(block.direction).toEqual(DirectionEnum.DOWN);
-		block.rotate(DirectionEnum.LEFT);
-		expect(block.direction).toEqual(DirectionEnum.LEFT);
-		block.rotate(DirectionEnum.LEFT);
-		expect(block.direction).toEqual(DirectionEnum.UP);
-		block.rotate(DirectionEnum.LEFT);
-		expect(block.direction).toEqual(DirectionEnum.RIGHT);
+		block.rotate(DirectionEnum.RIGHT, sprites);
 	});
 
 	it('Should move the block down', () => {
 		const block = new Block(defaultConfig);
+		const sprites: ISprite[] = [];
 
 		expect(block.y).toEqual(10);
-		block.move();
+		block.move(DirectionEnum.DOWN, sprites);
 		expect(block.y).toEqual(11);
 	});
 });
