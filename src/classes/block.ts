@@ -25,7 +25,7 @@ export default class Block implements IBlock {
 		this.key = config.key;
 		this.x = config.x;
 		this.y = config.y;
-		this.direction = DirectionEnum.DOWN;
+		this.direction = config.direction;
 		this.type = config.type;
 		this.containerHeight = config.containerHeight;
 		this.containerWidth = config.containerWidth;

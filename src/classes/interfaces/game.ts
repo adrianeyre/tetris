@@ -7,6 +7,7 @@ import DirectionEnum from '../enums/direction-enum';
 export default interface IGame {
 	player: IPlayer;
 	sprites?: ISprite[];
+	board?: ISprite[];
 	block: IBlock;
 	next: IBlock;
 	level: number;
