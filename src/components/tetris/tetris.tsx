@@ -23,6 +23,7 @@ export default class Tetris extends React.Component<ITetrisProps, ITetrisState> 
 			spriteHeight: 0,
 			containerWidth: 800,
 			containerHeight: 800,
+			timerInterval: 0,
 			game: new Game(this.props),
 		}
 
@@ -45,7 +46,7 @@ export default class Tetris extends React.Component<ITetrisProps, ITetrisState> 
 	public render() {
 		return <div className="tetris-play-container" ref={(d) => { this.container = d }} style={ this.styleContainer() }>
 
-			{ !this.state.game.isGameInPlay && <InfoBoard gameOver={ this.state.game.player.lives < 1 } startGame={ this.startGame } score={ this.state.game.player.score } containerHeight={ this.state.containerHeight } /> }
+			{ !this.state.game.isGameInPlay && <InfoBoard gameOver={ !this.state.game.player.isAlive } startGame={ this.startGame } score={ this.state.game.player.score } containerHeight={ this.state.containerHeight } /> }
 
 			{ this.state.game.isGameInPlay && <div className="play-area">
 				{ this.state.game.sprites?.map((sprite: ISprite) => <DrawSprite key={ sprite.key } sprite={ sprite } height={ this.state.spriteHeight } width={ this.state.spriteWidth } containerWidth={ this.state.containerWidth } />) }
@@ -89,6 +90,11 @@ export default class Tetris extends React.Component<ITetrisProps, ITetrisState> 
 
 		if (!game.isGameInPlay) this.stopTimer();
 		await this.setState(() => ({ game }));
+
+		if (this.state.game.timerInterval !== this.state.timerInterval) {
+			this.stopTimer();
+			this.startTimer();
+		}
 	}
 
 	private handleKeyDown = async (event: any): Promise<void> => {
@@ -100,9 +106,10 @@ export default class Tetris extends React.Component<ITetrisProps, ITetrisState> 
 	private handleMobileButton = async (direction: PlayerResultEnum): Promise<void> => await this.handleInput(direction);
 
 	private startTimer = async (): Promise<void> => {
-		const timer = setInterval(this.myTimer, 1000);
+		const timerInterval = this.state.game.timerInterval;
+		const timer = setInterval(this.myTimer, this.state.game.timerInterval);
 
-		await this.setState(() => ({ timer }));
+		await this.setState(() => ({ timer, timerInterval }));
 	}
 
 	private stopTimer = async (): Promise<void> => {

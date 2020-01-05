@@ -47,56 +47,76 @@ export default class Block implements IBlock {
 		if (newDirection > 3) newDirection = 0;
 		if (newDirection < 0) newDirection = 3;
 
-		const newBlocks = this.updateBlock(newDirection);
-		const isMoveValidRight = this.isMoveValid(sprites, newBlocks[0]);
-		const isMoveValidLeft = this.isMoveValid(sprites, newBlocks[1])
-		if (isMoveValidRight && isMoveValidLeft) this.direction = newDirection;
+		const isRotationValidRight = this.isRotationValid(newDirection, sprites);
 
+		if (!isRotationValidRight) return;
+
+		this.direction = newDirection;
 		this.matrix = this.updateMatrix(this.direction);
 		this.stop = this.updateStop(this.direction);
 		this.block = this.updateBlock(this.direction);
 	}
 
 	public move = (direction: DirectionEnum, sprites: ISprite[]): PlayerResultEnum => {
-		let allowMove = true;
+		let result = PlayerResultEnum.BLOCK_MOVING;
 
-		if (direction === DirectionEnum.DOWN) allowMove = this.moveDown(sprites);
-		if (direction === DirectionEnum.RIGHT || direction === DirectionEnum.LEFT) allowMove = this.moveSidewards(direction, sprites);
+		if (direction === DirectionEnum.DOWN) result = this.moveDown(sprites);
+		if (direction === DirectionEnum.RIGHT || direction === DirectionEnum.LEFT) result = this.moveSidewards(direction, sprites);
+		if (result === PlayerResultEnum.BLOCK_STOPPED) return this.isMatrixOutOfBounds();
 
-		return allowMove ? PlayerResultEnum.BLOCK_MOVING : PlayerResultEnum.BLOCK_STOPPED;
+		return result;
 	}
 
-	private moveDown = (sprites: ISprite[]): boolean => {
+	private moveDown = (sprites: ISprite[]): PlayerResultEnum => {
 		let allowMove = true;
 
 		this.stop.forEach((block: number[]) => {
 			const sprite = sprites.find((spr: ISprite) => spr.x === this.x + block[0] && spr.y === this.y + block[1]);
 
-			if (sprite && sprite.visable) allowMove = false;
-			if (this.y + block[1] > this.containerHeight) allowMove = false;
+			if (sprite && sprite.visable) allowMove = false
+			if (this.y + block[1] > this.containerHeight) allowMove = false
 		})
 
 		if (allowMove) this.y ++;
-		return allowMove;
+		return allowMove ? PlayerResultEnum.BLOCK_MOVING : PlayerResultEnum.BLOCK_STOPPED;
 	}
 
-	private moveSidewards = (direction: DirectionEnum, sprites: ISprite[]): boolean => {
+	private moveSidewards = (direction: DirectionEnum, sprites: ISprite[]): PlayerResultEnum => {
 		const block = this.block[direction === DirectionEnum.RIGHT ? 0 : 1];
-		const allowMove = this.isMoveValid(sprites, block);
-
-		if (allowMove && direction === DirectionEnum.RIGHT) this.x ++;
-		if (allowMove && direction === DirectionEnum.LEFT) this.x --;
-		return true;
-	}
-
-	private isMoveValid = (sprites: ISprite[], block: number[][]): boolean => {
-		let allowMove = true;
+		let result = PlayerResultEnum.BLOCK_MOVING
 		
 		block.forEach((blockMatix: number[]) => {
 			const sprite = sprites.find((spr: ISprite) => spr.x === this.x + blockMatix[0] && spr.y === this.y + blockMatix[1]);
 
+			if (sprite && sprite.visable) result = PlayerResultEnum.BLOCK_STOPPED
+			if (this.x + blockMatix[0] > this.containerWidth || this.x + blockMatix[0] < 1) result = PlayerResultEnum.BLOCK_STOPPED
+		})
+
+		if (result === PlayerResultEnum.BLOCK_MOVING && direction === DirectionEnum.RIGHT) this.x ++;
+		if (result === PlayerResultEnum.BLOCK_MOVING && direction === DirectionEnum.LEFT) this.x --;
+		return PlayerResultEnum.BLOCK_MOVING;
+	}
+
+	private isMatrixOutOfBounds = (): PlayerResultEnum => {
+		let result = PlayerResultEnum.BLOCK_STOPPED;
+
+		this.matrix.forEach((matrix: number[]) => {
+			if (this.y + matrix[1] < 1) result = PlayerResultEnum.DEAD;
+		})
+
+		return result;
+	}
+
+	private isRotationValid = (direction: DirectionEnum, sprites: ISprite[]): boolean => {
+		const matrix = this.updateMatrix(direction);
+		let allowMove = true;
+		
+		matrix.forEach((blockMatix: number[]) => {
+			const sprite = sprites.find((spr: ISprite) => spr.x === this.x + blockMatix[0] && spr.y === this.y + blockMatix[1]);
+
 			if (sprite && sprite.visable) allowMove = false;
 			if (this.x + blockMatix[0] > this.containerWidth || this.x + blockMatix[0] < 1) allowMove = false;
+			if (this.y + blockMatix[1] > this.containerHeight) allowMove = false;
 		})
 
 		return allowMove;

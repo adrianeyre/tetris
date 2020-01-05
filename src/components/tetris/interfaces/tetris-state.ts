@@ -7,4 +7,5 @@ export default interface ITetrisState {
 	containerWidth: number
 	containerHeight: number;
 	timer?: any;
+	timerInterval: number;
 }

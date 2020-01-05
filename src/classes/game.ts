@@ -1,3 +1,5 @@
+import { remove } from 'lodash';
+
 import IGame from './interfaces/game';
 import Player from './player';
 import IPlayer from './interfaces/player';
@@ -15,12 +17,16 @@ export default class Game implements IGame {
 	public player: IPlayer;
 	public sprites: ISprite[];
 	public block: IBlock;
+	public next: IBlock;
 	public level: number;
 	public direction: DirectionEnum;
 	public timer: any;
-	public iteration: number;
+	public timerInterval: number;
 	public isGameInPlay: boolean;
 
+	readonly defaultTimerInterval: number = 1000;
+	readonly intervalDecrease: number = 10;
+	readonly intervalMinimum: number = 100;
 	readonly height: number = 20;
 	readonly width: number = 10;
 	readonly spriteTypes: SpriteTypeEnum[] = [
@@ -37,10 +43,11 @@ export default class Game implements IGame {
 		this.player = new Player(config);
 		this.sprites = [];
 		this.block = this.newBlock(this.randomSprite());
+		this.next = this.newBlock(this.randomSprite());
 		this.level = 1;
 		this.direction = DirectionEnum.RIGHT
 		this.isGameInPlay = false;
-		this.iteration = 1;
+		this.timerInterval = this.defaultTimerInterval;
 
 		this.createBoard();
 		this.hideOrShowBlock(true);
@@ -49,7 +56,9 @@ export default class Game implements IGame {
 	public handleInput = (playerResult: PlayerResultEnum, sprite?: ISprite): void => {
 		switch (playerResult) {
 			case PlayerResultEnum.BLOCK_STOPPED:
-				this.createBlock(); break;
+				this.blockStopped(); break;
+			case PlayerResultEnum.DEAD:
+				this.lose(); break;
 			case PlayerResultEnum.ENTER:
 			case PlayerResultEnum.SPACE_BAR:
 				this.rotateBlock(DirectionEnum.RIGHT); break;
@@ -69,21 +78,28 @@ export default class Game implements IGame {
 	private createBoard = (): void => {
 		for (let y=1; y <= this.height; y++) {
 			for (let x=1; x <= this.width; x++) {
-				this.sprites.push(new Sprite({
-					key: `sprite-${ x }-${ y }`,
-					visable: false,
-					x,
-					y,
-					image: ImageEnum.SPRITE01,
-					type: SpriteTypeEnum.SPRITE01,
-				}));
+				this.sprites.push(this.newSprite(x, y));
 			}
 		}
+	}
+
+	private blockStopped = () => {
+		this.checkForWinningLines();
+		this.createBlock();
 	}
 
 	private createBlock = () => {
 		this.block = this.newBlock(this.randomSprite());
 	}
+
+	private newSprite = (x: number, y: number): ISprite => new Sprite({
+		key: `sprite-${ x }-${ y }`,
+		visable: false,
+		x,
+		y,
+		image: ImageEnum.SPRITE01,
+		type: SpriteTypeEnum.SPRITE01,
+	})
 
 	private newBlock = (type: SpriteTypeEnum): IBlock => new Block({
 		key: 'player-block',
@@ -118,6 +134,51 @@ export default class Game implements IGame {
 		this.hideOrShowBlock(true);
 
 		this.handleInput(result);
+	}
+
+	private checkForWinningLines = () => {
+		for (let y = this.height; y > 0; y--) {
+			const blocks = this.sprites.filter((sprite: ISprite) => sprite.visable && sprite.y === y);
+
+			if (blocks.length === this.width) {
+				this.removeLine(y);
+				this.moveLines(y);
+				this.addLine();
+				this.decreaseTimer();
+				y++;
+			}
+		}
+	}
+
+	private removeLine = (line: number): void => {
+		const blocks = this.sprites.filter((sprite: ISprite) => sprite.y === line);
+		blocks.forEach((sprite: ISprite) => remove(this.sprites, { key: sprite.key }));
+	}
+
+	private moveLines = (line: number): void => {
+		for (let y = line - 1; y > 0; y--) {
+			const blocks = this.sprites.filter((sprite: ISprite) => sprite.y === y);
+			blocks.forEach((sprite: ISprite) => {
+				sprite.y ++;
+				sprite.key = `sprite-${ sprite.x }-${ sprite.y }`;
+			});
+		}
+	}
+
+	private addLine = (): void => {
+		for (let x=1; x <= this.width; x++) {
+			this.sprites.push(this.newSprite(x, 1));
+		}
+	}
+
+	private lose = () => {
+		this.player.looseLife();
+		this.isGameInPlay = false;
+	}
+
+	private decreaseTimer = () => {
+		this.timerInterval -= this.intervalDecrease;
+		if (this.timerInterval < this.intervalMinimum) this.timerInterval = this.intervalMinimum;
 	}
 
 	private randomSprite = (): SpriteTypeEnum => this.spriteTypes[Math.floor(Math.random() * this.spriteTypes.length)];
