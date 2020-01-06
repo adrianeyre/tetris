@@ -5,9 +5,11 @@ import Player from './player';
 import IPlayer from './interfaces/player';
 import Sprite from './sprite';
 import Block from './block';
+import Counter from './counter';
 import ISprite from './interfaces/sprite';
 import IBlock from './interfaces/block';
 import INextBlock from './interfaces/next-block';
+import ICounter from './interfaces/counter';
 import PlayerResultEnum from './enums/player-result-enum';
 import DirectionEnum from './enums/direction-enum';
 import SpriteTypeEnum from './enums/sprite-type-enum';
@@ -22,12 +24,15 @@ export default class Game implements IGame {
 	public board: ISprite[];
 	public block: IBlock;
 	public next: IBlock;
-	public level: number;
+	public level: ICounter;
+	public score: ICounter;
+	public lines: ICounter;
 	public direction: DirectionEnum;
 	public timer: any;
 	public timerInterval: number;
 	public isGameInPlay: boolean;
 
+	readonly DEFAULT_LINE_SCORE: number = 100;
 	readonly defaultTimerInterval: number = 1000;
 	readonly intervalDecrease: number = 10;
 	readonly intervalMinimum: number = 100;
@@ -48,9 +53,11 @@ export default class Game implements IGame {
 		this.player = new Player(config);
 		this.sprites = [];
 		this.board = [];
+		this.level = new Counter({ x: 14, y: 9, value: 1, digits: 4 });
+		this.score = new Counter({ x: 12, y: 13, value: 0, digits: 8 });
+		this.lines = new Counter({ x: 12, y: 17, value: 0, digits: 8 });
 		this.block = this.newBlock(5, 0, DirectionEnum.DOWN, this.randomSprite());
 		this.next = this.nextBlock();
-		this.level = 1;
 		this.direction = DirectionEnum.RIGHT
 		this.isGameInPlay = false;
 		this.timerInterval = this.defaultTimerInterval;
@@ -59,6 +66,7 @@ export default class Game implements IGame {
 		this.hideOrShowBlock(true, this.block, this.sprites);
 		this.createBoard();
 		this.hideOrShowBlock(true, this.next, this.board);
+		this.updateCounters();
 	}
 
 	public handleInput = (playerResult: PlayerResultEnum, sprite?: ISprite): void => {
@@ -97,6 +105,12 @@ export default class Game implements IGame {
 				this.board.push(this.newSprite(x, y));
 			}
 		}
+	}
+
+	private updateCounters = (): void => {
+		this.score.updateValue(this.board);
+		this.level.updateValue(this.board);
+		this.lines.updateValue(this.board);
 	}
 
 	private blockStopped = (): void => {
@@ -178,6 +192,10 @@ export default class Game implements IGame {
 				this.moveLines(y);
 				this.addLine();
 				this.decreaseTimer();
+				this.score.addValue(this.level.value * this.DEFAULT_LINE_SCORE)
+				this.level.addValue(1);
+				this.lines.addValue(1);
+				this.updateCounters();
 				y++;
 			}
 		}

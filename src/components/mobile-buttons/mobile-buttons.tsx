@@ -13,7 +13,8 @@ export default class MobileButtons extends React.Component<IMobileButtonsProps, 
 				<button type="button" onClick={ this.props.handleMobileButton.bind(this, PlayerResultEnum.ARROW_RIGHT) }>RIGHT</button>
 			</div>
 			<div className="button-row">
-				<button type="button" onClick={ this.props.handleMobileButton.bind(this, PlayerResultEnum.SPACE_BAR) }>SPIN</button>
+				<button className="left-button" type="button" onClick={ this.props.handleMobileButton.bind(this, PlayerResultEnum.SPACE_BAR) }>SPIN</button>
+				<button type="button" onClick={ this.props.handleMobileButton.bind(this, PlayerResultEnum.ARROW_DOWN) }>DOWN</button>
 			</div>
 		</div>
 	}

@@ -1,6 +1,7 @@
 import IPlayer from './player';
 import ISprite from './sprite';
 import IBlock from './block';
+import ICounter from './counter';
 import PlayerResultEnum from '../enums/player-result-enum';
 import DirectionEnum from '../enums/direction-enum';
 
@@ -10,7 +11,9 @@ export default interface IGame {
 	board?: ISprite[];
 	block: IBlock;
 	next: IBlock;
-	level: number;
+	level: ICounter;
+	score: ICounter;
+	lines: ICounter;
 	direction: DirectionEnum;
 	timer: any;
 	timerInterval: number;

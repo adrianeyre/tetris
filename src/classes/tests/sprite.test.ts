@@ -26,7 +26,6 @@ describe('Sprite', () => {
 		expect(sprite.x).toEqual(10);
 		expect(sprite.y).toEqual(10);
 		expect(sprite.zIndex).toEqual(5000);
-		expect(sprite.image).toEqual('sprite-01.png');
 		expect(sprite.type).toEqual(SpriteTypeEnum.SPRITE01);
 	});
 });
