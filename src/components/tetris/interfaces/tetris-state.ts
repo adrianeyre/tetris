@@ -6,6 +6,7 @@ export default interface ITetrisState {
 	spriteHeight: number;
 	containerWidth: number
 	containerHeight: number;
+	containerMargin: number;
 	timer?: any;
 	timerInterval: number;
 }

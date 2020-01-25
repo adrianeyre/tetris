@@ -23,6 +23,7 @@ export default class Tetris extends React.Component<ITetrisProps, ITetrisState> 
 			spriteHeight: 0,
 			containerWidth: 800,
 			containerHeight: 800,
+			containerMargin: 0,
 			timerInterval: 0,
 			game: new Game(this.props),
 		}
@@ -60,6 +61,7 @@ export default class Tetris extends React.Component<ITetrisProps, ITetrisState> 
 
 	private styleContainer = () => ({
 		maxWidth: `${ this.state.containerHeight }px`,
+		marginLeft: `${ this.state.containerMargin }px`
 	})
 
 	private styleGameButtons = () => ({
@@ -80,10 +82,11 @@ export default class Tetris extends React.Component<ITetrisProps, ITetrisState> 
 	private updatePlayerArea = (): void => {
 		const containerHeight = this.container && this.container.getBoundingClientRect().height;
 		let containerWidth = this.container && this.container.getBoundingClientRect().width;
+		const containerMargin = (window.innerWidth - containerHeight) / 2;
 		if (containerWidth > containerHeight) containerWidth = containerHeight;
 		const spriteWidth = containerWidth / this.SPRITE_BLOCKS_WIDTH;
 		const spriteHeight = ((containerWidth / 100) * 100 ) / this.SPRITE_BLOCKS_HEIGHT;
-		this.setState(() => ({ spriteWidth, spriteHeight, containerWidth, containerHeight }))
+		this.setState(() => ({ spriteWidth, spriteHeight, containerWidth, containerHeight, containerMargin }))
 	}
 
 	private handleInput = async (input: PlayerResultEnum): Promise<void> => {
