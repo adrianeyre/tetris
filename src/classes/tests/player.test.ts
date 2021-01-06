@@ -6,16 +6,7 @@ describe('Player', () => {
 
 		expect(player.key).toEqual('player');
 		expect(player.score).toEqual(0);
-		expect(player.lives).toEqual(3);
 		expect(player.isAlive).toEqual(true);
-	});
-
-	it('Should loose player life', () => {
-		const player = new Player({});
-
-		expect(player.lives).toEqual(3);
-		player.looseLife();
-		expect(player.lives).toEqual(2);
 	});
 
 	it('Should add player score', () => {

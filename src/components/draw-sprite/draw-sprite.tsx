@@ -1,30 +1,30 @@
-import React from 'react';
+import React, {FC } from 'react';
 
 import IDrawSpriteProps from './interfaces/draw-sprite-props';
 
-export default class DrawSprite extends React.Component<IDrawSpriteProps, {}> {
-	private offsetHeight: number = 0;
-	private offsetWidth: number = 0;
+const DrawSprite: FC<IDrawSpriteProps> = (props: IDrawSpriteProps) => {
+	const offsetHeight = 0;
+	const offsetWidth  = 0;
 
-	public render() {
-		if (!this.props.sprite.visable) return <div></div>
-
-		return <div key={ this.props.sprite.key } style={ this.styleSprite(this.props.sprite.x, this.props.sprite.y) }>
-			<img
-				src={ this.props.sprite.image }
-				height={ this.props.height }
-				width={ this.props.width }
-				alt="sprite"
-			/>
-		</div>
-	}
-
-	private styleSprite = (x: number, y: number) => ({
+	const styleSprite = (x: number, y: number) => ({
 		width: 0,
 		height: 0,
 		opacity: 1,
-		WebkitTransform: `translate3d(${ (x - 1) * this.props.width + this.offsetWidth }px, ${ this.offsetHeight + (y - 1) * this.props.height }px, 0)`,
-		transform: `translate3d(${ (x - 1) * this.props.width + this.offsetWidth }px, ${ this.offsetHeight + (y - 1) * this.props.height }px, 0)`,
-		zIndex: this.props.sprite.zIndex,
+		WebkitTransform: `translate3d(${ (x - 1) * props.width + offsetWidth }px, ${ offsetHeight + (y - 1) * props.height }px, 0)`,
+		transform: `translate3d(${ (x - 1) * props.width + offsetWidth }px, ${ offsetHeight + (y - 1) * props.height }px, 0)`,
+		zIndex: props.sprite.zIndex,
 	})
+
+	if (!props.sprite.visable) return <div></div>
+		
+	return <div key={ props.sprite.key } style={ styleSprite(props.sprite.x, props.sprite.y) }>
+		<img
+			src={ props.sprite.image }
+			height={ props.height }
+			width={ props.width }
+			alt="sprite"
+		/>
+	</div>
 }
+
+export default DrawSprite;

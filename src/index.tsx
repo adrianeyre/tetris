@@ -6,7 +6,13 @@ import 'react-app-polyfill/stable';
 import Tetris from './components/tetris/tetris';
 
 import './index.scss';
-import * as serviceWorker from './serviceWorker';
+import reportWebVitals from './reportWebVitals';
 
-ReactDOM.render(<Tetris />, document.getElementById('root'));
-serviceWorker.unregister();
+ReactDOM.render(
+    <React.StrictMode>
+        <Tetris />
+    </React.StrictMode>,
+    document.getElementById('root')
+);
+
+reportWebVitals();
