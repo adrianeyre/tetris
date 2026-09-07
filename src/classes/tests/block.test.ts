@@ -3,10 +3,10 @@ import SpriteTypeEnum from '../enums/sprite-type-enum';
 
 import Block from '../block';
 import IBlockProps from '../interfaces/block-props';
-import ISprite from 'classes/interfaces/sprite';
+import ISprite from '../interfaces/sprite';
 
 describe('Block', () => {
-	let defaultConfig: IBlockProps
+	let defaultConfig: IBlockProps;
 
 	beforeEach(() => {
 		defaultConfig = {
@@ -17,8 +17,8 @@ describe('Block', () => {
 			type: SpriteTypeEnum.SPRITE01,
 			containerHeight: 20,
 			containerWidth: 10,
-		}
-	})
+		};
+	});
 
 	it('Should create Block class', () => {
 		const block = new Block(defaultConfig);

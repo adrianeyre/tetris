@@ -1,3 +1,60 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Info Board Should render correctly 1`] = `ShallowWrapper {}`;
+exports[`Info Board > Should render correctly 1`] = `
+<div>
+  <div
+    class="info-board"
+    style="width: 100%; max-width: 1000px;"
+  >
+    <div
+      class="info-board-header"
+    >
+      <img
+        alt="player"
+        src="/src/images/sprite-07.png"
+      />
+      <span
+        class="header-text"
+      >
+        Tetris
+      </span>
+      <img
+        alt="player"
+        src="/src/images/sprite-07.png"
+      />
+    </div>
+    <div
+      class="game-over-area"
+    >
+      <div
+        class="game-over-title"
+      >
+        Game Over
+      </div>
+      <div
+        class="game-over-text"
+      >
+        You scored 
+        1000
+        , better luck next time!
+      </div>
+    </div>
+    <div
+      class="info-board-instructions"
+    >
+      <p>
+        You have to make full horizontal lines with the different shaped blocks that fall into the game area. Full lines will then disappear and provide points. The more lines you make at the same time, the more points you earn.
+      </p>
+    </div>
+    <div
+      class="button-area"
+    >
+      <button
+        type="button"
+      >
+        Play Game
+      </button>
+    </div>
+  </div>
+</div>
+`;

@@ -1,4 +1,4 @@
-import DirectEnum from "../enums/direction-enum";
+import DirectEnum from '../enums/direction-enum';
 import INextBlock from '../interfaces/next-block';
 
 const blocksData: INextBlock[] = [
@@ -37,14 +37,13 @@ const blocksData: INextBlock[] = [
 		x: 15,
 		y: 4,
 		direction: DirectEnum.DOWN,
-	}
-	,
+	},
 	{
 		key: 'sprite07',
 		x: 15,
 		y: 4,
 		direction: DirectEnum.DOWN,
-	}
+	},
 ];
 
 export default blocksData;

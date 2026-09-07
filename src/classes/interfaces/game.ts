@@ -15,7 +15,6 @@ export default interface IGame {
 	score: ICounter;
 	lines: ICounter;
 	direction: DirectionEnum;
-	timer: any;
 	timerInterval: number;
 	isGameInPlay: boolean;
 	handleInput(playerResult: PlayerResultEnum): void;
