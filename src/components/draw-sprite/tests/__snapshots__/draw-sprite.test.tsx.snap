@@ -1,3 +1,16 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Draw Sprite Should render correctly 1`] = `ShallowWrapper {}`;
+exports[`Draw Sprite > Should render correctly 1`] = `
+<div>
+  <div
+    style="width: 0px; height: 0px; opacity: 1; -webkit-transform: translate3d(90px, 90px, 0); transform: translate3d(90px, 90px, 0); z-index: 5000;"
+  >
+    <img
+      alt="sprite"
+      height="10"
+      src="/src/images/sprite-01.png"
+      width="10"
+    />
+  </div>
+</div>
+`;

@@ -3,5 +3,5 @@ export default interface IPlayer {
 	score: number;
 	isAlive: boolean;
 	looseLife(): boolean;
-	addScore(extra: number): number
+	addScore(extra: number): number;
 }

@@ -14,7 +14,6 @@ import PlayerResultEnum from './enums/player-result-enum';
 import DirectionEnum from './enums/direction-enum';
 import SpriteTypeEnum from './enums/sprite-type-enum';
 import ImageEnum from './enums/image-enum';
-import ITetrisProps from '../components/tetris/interfaces/tetris-props';
 
 import * as blocksData from './data/blocks';
 
@@ -28,7 +27,6 @@ export default class Game implements IGame {
 	public score: ICounter;
 	public lines: ICounter;
 	public direction: DirectionEnum;
-	public timer: any;
 	public timerInterval: number;
 	public isGameInPlay: boolean;
 
@@ -49,8 +47,8 @@ export default class Game implements IGame {
 		SpriteTypeEnum.SPRITE07,
 	];
 
-	constructor(config: ITetrisProps) {
-		this.player = new Player(config);
+	constructor() {
+		this.player = new Player();
 		this.sprites = [];
 		this.board = [];
 		this.level = new Counter({ x: 14, y: 9, value: 1, digits: 4 });
@@ -58,7 +56,7 @@ export default class Game implements IGame {
 		this.lines = new Counter({ x: 12, y: 17, value: 0, digits: 8 });
 		this.block = this.newBlock(5, 0, DirectionEnum.DOWN, this.randomSprite());
 		this.next = this.nextBlock();
-		this.direction = DirectionEnum.RIGHT
+		this.direction = DirectionEnum.RIGHT;
 		this.isGameInPlay = false;
 		this.timerInterval = this.defaultTimerInterval;
 
@@ -69,27 +67,33 @@ export default class Game implements IGame {
 		this.updateCounters();
 	}
 
-	public handleInput = (playerResult: PlayerResultEnum, sprite?: ISprite): void => {
+	public handleInput = (playerResult: PlayerResultEnum): void => {
 		switch (playerResult) {
 			case PlayerResultEnum.BLOCK_STOPPED:
-				this.blockStopped(); break;
+				this.blockStopped();
+				break;
 			case PlayerResultEnum.DEAD:
-				this.lose(); break;
+				this.lose();
+				break;
 			case PlayerResultEnum.ENTER:
 			case PlayerResultEnum.SPACE_BAR:
-				this.rotateBlock(DirectionEnum.RIGHT); break;
+				this.rotateBlock(DirectionEnum.RIGHT);
+				break;
 			case PlayerResultEnum.ARROW_RIGHT:
-				this.moveBlock(DirectionEnum.RIGHT); break;
+				this.moveBlock(DirectionEnum.RIGHT);
+				break;
 			case PlayerResultEnum.ARROW_LEFT:
-				this.moveBlock(DirectionEnum.LEFT); break;
+				this.moveBlock(DirectionEnum.LEFT);
+				break;
 			case PlayerResultEnum.ARROW_DOWN:
-				this.moveBlock(DirectionEnum.DOWN); break;
+				this.moveBlock(DirectionEnum.DOWN);
+				break;
 		}
-	}
+	};
 
 	public handleTimer = (): void => {
 		this.moveBlock(DirectionEnum.DOWN);
-	}
+	};
 
 	private createSprites = (): void => {
 		for (let y = 1; y <= this.height; y++) {
@@ -97,7 +101,7 @@ export default class Game implements IGame {
 				this.sprites.push(this.newSprite(x, y));
 			}
 		}
-	}
+	};
 
 	private createBoard = (): void => {
 		for (let y = 1; y <= this.height; y++) {
@@ -105,48 +109,50 @@ export default class Game implements IGame {
 				this.board.push(this.newSprite(x, y));
 			}
 		}
-	}
+	};
 
 	private updateCounters = (): void => {
 		this.score.updateValue(this.board);
 		this.level.updateValue(this.board);
 		this.lines.updateValue(this.board);
-	}
+	};
 
 	private blockStopped = (): void => {
 		this.checkForWinningLines();
 		this.createBlock();
 		this.createNextBlock();
-	}
+	};
 
 	private createBlock = (): void => {
 		this.block = this.newBlock(5, 0, DirectionEnum.DOWN, this.next.type);
-	}
+	};
 
 	private createNextBlock = (): void => {
 		this.hideOrShowBlock(false, this.next, this.board);
 		this.next = this.nextBlock();
 		this.hideOrShowBlock(true, this.next, this.board);
-	}
+	};
 
-	private newSprite = (x: number, y: number): ISprite => new Sprite({
-		key: `sprite-${ x }-${ y }`,
-		visable: false,
-		x,
-		y,
-		image: ImageEnum.SPRITE01,
-		type: SpriteTypeEnum.SPRITE01,
-	})
+	private newSprite = (x: number, y: number): ISprite =>
+		new Sprite({
+			key: `sprite-${x}-${y}`,
+			visable: false,
+			x,
+			y,
+			image: ImageEnum.SPRITE01,
+			type: SpriteTypeEnum.SPRITE01,
+		});
 
-	private newBlock = (x: number, y: number, direction: DirectionEnum, type: SpriteTypeEnum): IBlock => new Block({
-		key: 'player-block',
-		x,
-		y,
-		type,
-		direction,
-		containerHeight: this.height,
-		containerWidth: this.width,
-	});
+	private newBlock = (x: number, y: number, direction: DirectionEnum, type: SpriteTypeEnum): IBlock =>
+		new Block({
+			key: 'player-block',
+			x,
+			y,
+			type,
+			direction,
+			containerHeight: this.height,
+			containerWidth: this.width,
+		});
 
 	private nextBlock = (): IBlock => {
 		const type = this.randomSprite();
@@ -155,7 +161,7 @@ export default class Game implements IGame {
 		if (!blockData) throw new Error('No default block data for next block');
 
 		return this.newBlock(blockData.x, blockData.y, blockData.direction, type);
-	}
+	};
 
 	private hideOrShowBlock = (visable: boolean, block: IBlock, sprites: ISprite[]): void => {
 		block.matrix.forEach((matrix: number[]) => {
@@ -166,14 +172,14 @@ export default class Game implements IGame {
 				if (!visable) sprite.hide();
 				sprite.updateImage(block.type);
 			}
-		})
-	}
+		});
+	};
 
 	private rotateBlock = (direction: DirectionEnum): void => {
 		this.hideOrShowBlock(false, this.block, this.sprites);
 		this.block.rotate(direction, this.sprites);
 		this.hideOrShowBlock(true, this.block, this.sprites);
-	}
+	};
 
 	private moveBlock = (direction: DirectionEnum): void => {
 		this.hideOrShowBlock(false, this.block, this.sprites);
@@ -181,7 +187,7 @@ export default class Game implements IGame {
 		this.hideOrShowBlock(true, this.block, this.sprites);
 
 		this.handleInput(result);
-	}
+	};
 
 	private checkForWinningLines = () => {
 		for (let y = this.height; y > 0; y--) {
@@ -192,45 +198,45 @@ export default class Game implements IGame {
 				this.moveLines(y);
 				this.addLine();
 				this.decreaseTimer();
-				this.score.addValue(this.level.value * this.DEFAULT_LINE_SCORE)
+				this.score.addValue(this.level.value * this.DEFAULT_LINE_SCORE);
 				this.level.addValue(1);
 				this.lines.addValue(1);
 				this.updateCounters();
 				y++;
 			}
 		}
-	}
+	};
 
 	private removeLine = (line: number): void => {
 		const blocks = this.sprites.filter((sprite: ISprite) => sprite.y === line);
 		blocks.forEach((sprite: ISprite) => remove(this.sprites, { key: sprite.key }));
-	}
+	};
 
 	private moveLines = (line: number): void => {
 		for (let y = line - 1; y > 0; y--) {
 			const blocks = this.sprites.filter((sprite: ISprite) => sprite.y === y);
 			blocks.forEach((sprite: ISprite) => {
-				sprite.y ++;
-				sprite.key = `sprite-${ sprite.x }-${ sprite.y }`;
+				sprite.y++;
+				sprite.key = `sprite-${sprite.x}-${sprite.y}`;
 			});
 		}
-	}
+	};
 
 	private addLine = (): void => {
-		for (let x=1; x <= this.width; x++) {
+		for (let x = 1; x <= this.width; x++) {
 			this.sprites.push(this.newSprite(x, 1));
 		}
-	}
+	};
 
 	private lose = () => {
 		this.player.looseLife();
 		this.isGameInPlay = false;
-	}
+	};
 
 	private decreaseTimer = () => {
 		this.timerInterval -= this.intervalDecrease;
 		if (this.timerInterval < this.intervalMinimum) this.timerInterval = this.intervalMinimum;
-	}
+	};
 
 	private randomSprite = (): SpriteTypeEnum => this.spriteTypes[Math.floor(Math.random() * this.spriteTypes.length)];
 }

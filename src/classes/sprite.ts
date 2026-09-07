@@ -30,23 +30,54 @@ export default class Sprite implements ISprite {
 	public image: string;
 	public type: SpriteTypeEnum;
 
-	private imageType: ImageEnum;
-
 	readonly Z_INDEX: number = 5000;
-	readonly playerImages = {sprite01, sprite02, sprite03, sprite04, sprite05, sprite06, sprite07, num0, num1, num2, num3, num4, num5, num6, num7, num8, num9};
+
+	// Keyed by the enum rather than by bare identifiers, so TypeScript checks
+	// that every sprite type has a picture instead of quietly handing back
+	// `undefined` for one that does not.
+	readonly playerImages: Record<SpriteTypeEnum, string> = {
+		[SpriteTypeEnum.SPRITE01]: sprite01,
+		[SpriteTypeEnum.SPRITE02]: sprite02,
+		[SpriteTypeEnum.SPRITE03]: sprite03,
+		[SpriteTypeEnum.SPRITE04]: sprite04,
+		[SpriteTypeEnum.SPRITE05]: sprite05,
+		[SpriteTypeEnum.SPRITE06]: sprite06,
+		[SpriteTypeEnum.SPRITE07]: sprite07,
+		[SpriteTypeEnum.NUM0]: num0,
+		[SpriteTypeEnum.NUM1]: num1,
+		[SpriteTypeEnum.NUM2]: num2,
+		[SpriteTypeEnum.NUM3]: num3,
+		[SpriteTypeEnum.NUM4]: num4,
+		[SpriteTypeEnum.NUM5]: num5,
+		[SpriteTypeEnum.NUM6]: num6,
+		[SpriteTypeEnum.NUM7]: num7,
+		[SpriteTypeEnum.NUM8]: num8,
+		[SpriteTypeEnum.NUM9]: num9,
+	};
+
+	// ImageEnum is the numeric picture slot a sprite is created with; this is
+	// the bridge from that slot to the sprite type the images are keyed by.
+	readonly imageTypes: Record<ImageEnum, SpriteTypeEnum> = {
+		[ImageEnum.SPRITE01]: SpriteTypeEnum.SPRITE01,
+		[ImageEnum.SPRITE02]: SpriteTypeEnum.SPRITE02,
+		[ImageEnum.SPRITE03]: SpriteTypeEnum.SPRITE03,
+		[ImageEnum.SPRITE04]: SpriteTypeEnum.SPRITE04,
+		[ImageEnum.SPRITE05]: SpriteTypeEnum.SPRITE05,
+		[ImageEnum.SPRITE06]: SpriteTypeEnum.SPRITE06,
+		[ImageEnum.SPRITE07]: SpriteTypeEnum.SPRITE07,
+	};
 
 	constructor(config: ISpriteProps) {
-		this.imageType = config.image;
 		this.key = config.key;
 		this.visable = config.visable;
 		this.x = config.x;
 		this.y = config.y;
 		this.zIndex = this.Z_INDEX;
-		this.image = this.playerImages[this.imageType];
+		this.image = this.playerImages[this.imageTypes[config.image]];
 		this.type = config.type;
 	}
 
-	public show = (): boolean => this.visable = true;
-	public hide = (): boolean => this.visable = false;
-	public updateImage = (type: SpriteTypeEnum): string => this.image = this.playerImages[type];
+	public show = (): boolean => (this.visable = true);
+	public hide = (): boolean => (this.visable = false);
+	public updateImage = (type: SpriteTypeEnum): string => (this.image = this.playerImages[type]);
 }

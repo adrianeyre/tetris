@@ -1,4 +1,4 @@
-import DirectEnum from "../enums/direction-enum";
+import DirectEnum from '../enums/direction-enum';
 
 export default interface INextBlock {
 	key: string;

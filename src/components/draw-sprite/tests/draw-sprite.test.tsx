@@ -1,5 +1,4 @@
-import React from 'react';
-import { shallow } from 'enzyme';
+import { render } from '@testing-library/react';
 
 import DrawSprite from '../draw-sprite';
 import IDrawSpriteProps from '../interfaces/draw-sprite-props';
@@ -23,7 +22,23 @@ describe('Draw Sprite', () => {
 			containerWidth: 10,
 		};
 
-		const drawFish = shallow(<DrawSprite {...defaultProps} />);
-		expect(drawFish).toMatchSnapshot();
+		const { container } = render(<DrawSprite {...defaultProps} />);
+
+		expect(container).toMatchSnapshot();
+	});
+
+	it('Should render nothing for a hidden sprite', () => {
+		const sprite = new Sprite({
+			key: 'key',
+			visable: false,
+			x: 10,
+			y: 10,
+			image: ImageEnum.SPRITE01,
+			type: SpriteTypeEnum.SPRITE01,
+		});
+
+		const { container } = render(<DrawSprite sprite={sprite} height={10} width={10} containerWidth={10} />);
+
+		expect(container.querySelector('img')).toBeNull();
 	});
 });

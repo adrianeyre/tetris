@@ -1,18 +1,15 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import 'react-app-polyfill/ie11';
-import 'react-app-polyfill/stable';
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
 
 import Tetris from './components/tetris/tetris';
 
 import './index.scss';
-import reportWebVitals from './reportWebVitals';
 
-ReactDOM.render(
-    <React.StrictMode>
-        <Tetris />
-    </React.StrictMode>,
-    document.getElementById('root')
+const container = document.getElementById('root');
+if (!container) throw new Error('No #root element to mount the game into');
+
+createRoot(container).render(
+	<StrictMode>
+		<Tetris />
+	</StrictMode>,
 );
-
-reportWebVitals();

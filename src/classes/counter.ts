@@ -21,7 +21,7 @@ export default class Counter implements ICounter {
 		SpriteTypeEnum.NUM7,
 		SpriteTypeEnum.NUM8,
 		SpriteTypeEnum.NUM9,
-	]
+	];
 
 	constructor(config: ICounterProps) {
 		this.x = config.x;
@@ -43,9 +43,9 @@ export default class Counter implements ICounter {
 				sprite.updateImage(this.sprites[this.values[digit]]);
 			}
 
-			digit ++;
+			digit++;
 		}
-	}
+	};
 
 	public addValue = (value: number): void => {
 		this.value += value;
@@ -53,10 +53,10 @@ export default class Counter implements ICounter {
 		let newValue = this.value;
 
 		for (let x = this.digits; x > 0; x--) {
-			const tenth = 10 ** (x - 1)
+			const tenth = 10 ** (x - 1);
 			const result = Math.floor(newValue / tenth);
 			this.values.push(result);
 			newValue -= result * tenth;
 		}
-	}
+	};
 }
