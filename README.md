@@ -48,4 +48,4 @@ and deploys the built site to GitHub Pages.
 
 ## <a name="Play">Play Tetris</a>
 
-- [Tetris](https://adrianeyre.github.io/tetris/)
+- [Tetris](https://tetris.adrianeyre.co.uk/)
